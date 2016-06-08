@@ -31,41 +31,4 @@ Example
 
 See index.html for concrete example
 
-**FOR LOCAL DEVELOPMENT ONLY**
-
-* You will still need to install (and run) redis
-* also do not forget to rename *env.example* to *.env*
-
-Now you should be able to start the project (! locally for development) with :
-
-`npm run dev`
-
-To make sure you have up-to-date javascript while developing (with debugging info), you should run
-`npm run watch`, in a separate console.
-
-We are using [browserify](http://browserify.org/) to glue all our javascript files together into 1 single .js file
-(less http requests so more efficient).
-That is not the only advantage.
-"Browserify lets you require('modules') in the browser by bundling up all of your dependencies."
-
-We use this powerful concept in our angular applications, to make our code more readable, and well
-separated.
-Browserify also allows us to use a whole lot of modules that are available through npm directly in the browser without
-modification (even 'node-only' modules).
-
-* [Watchify](https://github.com/substack/watchify) will monitor your files for changes (but it will not automatically monitor newly created files !) and recompile
-everything again.
-* [node-lessify](https://www.npmjs.com/package/node-lessify) is a plugin which allows you to require( 'my.css' ). This allows us to also keep the relevant css inside the module instead of as a
-separate `<link rel="stylesheet" href="*.css" />` tags insde our html.
-
-* Because of security reasons, we still run a server to avoid exposing OAuth client secrets on the web.
-* Configuration
-* Dependencies
-* Database configuration
-* Deployment instructions
-
-### Questions ###
-
-Mail to frederik.tilkin@katholiekonderwijs.vlaanderen, dimitry_dhondt@katholiekonderwijs.vlaanderen.
-
-[vsko-project-layout]: https://docs.google.com/document/d/13y92VOrvdEI8rY0hz9oWRIcHQXej-Z0VXPkzr68Qvxg
+Mail to bianca.mullie@katholiekonderwijs.vlaanderen
