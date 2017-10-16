@@ -2,7 +2,7 @@
 
 ZILL DEVELOPER GUIDE: [https://zill-developers.katholiekonderwijs.vlaanderen](https://zill-developers.katholiekonderwijs.vlaanderen)
 
-!Issues and pull requests allways welcome!
+! Issues and pull requests allways welcome !
 
 ### ZILL donut ###
 
