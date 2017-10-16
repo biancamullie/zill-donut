@@ -1,7 +1,7 @@
 $.fn.zillDonut = function(config) {
   var leerplanversie = config.curriculumVersion;
   var fieldCounters = config.fieldCounters;
-  $.get("https://accapi.vsko.be/content?root=" + leerplanversie + "&typeIn=CURRICULUM_ZILL_CLUSTER,CURRICULUM_ZILL_DEVELOPMENT_FIELD", function(data) {
+  $.get(config.api + "/content?root=" + leerplanversie + "&typeIn=CURRICULUM_ZILL_CLUSTER,CURRICULUM_ZILL_DEVELOPMENT_FIELD", function(data) {
     var personClusterKey;
     var cultureClusterKey;
     var personData = [];
@@ -10,22 +10,22 @@ $.fn.zillDonut = function(config) {
     var cultureChartData = [];
     for (i = 0; i < data.results.length; i++) { // get clusters
       var cluster = data.results[i].$$expanded;
-      if (cluster.title == 'Cultuurgebonden ontwikkeling') {
-        cultureClusterKey = cluster.key;
+      if (cluster.identifiers[0] == 'CG') {
+        cultureClusterKey = cluster.$$meta.permalink;
         //              cultureChartData = addFields(cluster);
       }
-      else if (cluster.title == 'Persoonsgebonden ontwikkeling') {
-        personClusterKey = cluster.key;
+      else if (cluster.identifiers[0] == 'PG') {
+        personClusterKey = cluster.$$meta.permalink;
         //              personChartData = addFields(cluster);
       }
     }
     for (i = 0; i < data.results.length; i++) { // get fields beneath
       if (data.results[i].$$expanded.type == 'CURRICULUM_ZILL_DEVELOPMENT_FIELD') {
         var field = data.results[i].$$expanded;
-        if (field.$$relationsFrom[0].$$expanded.to == personClusterKey) {
+        if (field.$$relationsFrom[0].$$expanded.to.href == personClusterKey) {
           personData.push(createObject(field));
         }
-        else if (field.$$relationsFrom[0].$$expanded.to == cultureClusterKey) {
+        else if (field.$$relationsFrom[0].$$expanded.to.href == cultureClusterKey) {
           cultureData.push(createObject(field));
         }
       }
@@ -36,7 +36,7 @@ $.fn.zillDonut = function(config) {
     cultureData.sort(function(a, b) {
       return a.readorder - b.readorder
     });
-    
+
     personChartData = getChartData(personData);
     cultureChartData = getChartData(cultureData);
 
@@ -64,15 +64,15 @@ $.fn.zillDonut = function(config) {
       var result;
       var addChartDataForField = function(field) {
         chartData.push({
-          value: field.count,
-          color: field.field.color,
-          label: field.field.title + ' ingevuld'
-        });
+                         value: field.count,
+                         color: field.field.color,
+                         label: field.field.title + ' ingevuld'
+                       });
         chartData.push({
-          value: getReverseCount(field.count),
-          color: '#f2f2f2',
-          label: field.field.title + ' grijs'
-        });
+                         value: getReverseCount(field.count),
+                         color: '#f2f2f2',
+                         label: field.field.title + ' grijs'
+                       });
       };
       for (i = 0; i < fields.length; i++) {
         addChartDataForField(fields[i]);
@@ -83,8 +83,8 @@ $.fn.zillDonut = function(config) {
       type: 'doughnut',
       data: {
         labels: cultureChartData.map(function(a) {
-            return a.label;
-          }),
+          return a.label;
+        }),
         datasets: [{
           data: cultureChartData.map(function(a) {
             return a.value;
@@ -100,8 +100,8 @@ $.fn.zillDonut = function(config) {
       type: 'doughnut',
       data: {
         labels: personChartData.map(function(a) {
-            return a.label;
-          }),
+          return a.label;
+        }),
         datasets: [{
           data: personChartData.map(function(a) {
             return a.value;
@@ -120,7 +120,7 @@ $.fn.zillDonut = function(config) {
     tooltips: {mode:'label'},
     segmentShowStroke: false,
     segmentStrokeColor: '#fff',
-    segmentStrokeWidth: 2,
+    segmentStrokeWidth: 1,
     //animations
     animation: false,
     animationSteps: 170,
@@ -130,7 +130,7 @@ $.fn.zillDonut = function(config) {
     tooltips : {
       enabled:false
     },
-    cutoutPercentage:50
+    cutoutPercentage:40
   };
   var cultureChartOptions = {
     maintainAspectRatio: false,
@@ -138,7 +138,7 @@ $.fn.zillDonut = function(config) {
     tooltips: {mode:'label'},
     segmentShowStroke: false,
     segmentStrokeColor: '#fff',
-    segmentStrokeWidth: 2,
+    segmentStrokeWidth: 1,
     //animations
     animation: false,
     animationSteps: 170,
@@ -148,17 +148,18 @@ $.fn.zillDonut = function(config) {
     tooltips : {
       enabled:false
     },
-    cutoutPercentage : 70
+    cutoutPercentage : 60
   };
-  console.log(this.height());
   var div1 = document.createElement('div');
   var newChart1 = document.createElement('canvas');
+  newChart1.style = '-ms-transform: rotate(-30deg); ' +
+    '    -webkit-transform: rotate(-30deg);\n' +
+    '    transform: rotate(-30deg);';
   div1.style.height = this.height() + 'px';
   this.append(div1);
   div1.appendChild(newChart1);
   var div2 = document.createElement('div');
   div2.style.height = this.height()/2 + 'px';
-  console.log(0-(this.height()/2 - this.height()/4));
   div2.style.marginTop = 0-(this.height()/2 + this.height()/4) + 'px';
   var newChart2 = document.createElement('canvas');
   newChart2.height = '75';
