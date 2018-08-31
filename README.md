@@ -22,6 +22,7 @@ Call the zillDonut function with a json-parameter which consists of the followin
 **fieldCounters** --> Fields + counters (# of goals/content in this field that were selected). If a specific field is not mentioned, we assume the count is 0.
 
 Example 
+`
 {  
     "api": "https://cached-api.katholiekonderwijs.vlaanderen",
     "curriculumVersion":"/content/19b7096c-a195-4fdd-a8a9-8b8ba7bf22c9",
@@ -32,5 +33,5 @@ Example
         "849e963e-5005-4d98-a045-fa41265a90e5": 3
      }
 }
-
+`
 See index.html for concrete example
