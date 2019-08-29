@@ -7,7 +7,7 @@ ZILL DEVELOPER GUIDE: [https://zill-developers.katholiekonderwijs.vlaanderen](ht
 ### ZILL donut ###
 
 * this is the Chart that represents the zill selection.
-* version 0.2
+* version 0.3
 
 
 ### Getting started ###
