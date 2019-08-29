@@ -1,3 +1,33 @@
+//Pollyfill: .filter()
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function(fun) {
+    'use strict';
+
+    if (this === void 0 || this === null) {
+      throw new TypeError();
+    }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== 'function') {
+      throw new TypeError();
+    }
+
+    var res = [];
+    var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+    for (var i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i];
+        if (fun.call(thisArg, val, i, t)) {
+          res.push(val);
+        }
+      }
+    }
+
+    return res;
+  };
+}
+
 $.fn.zillDonut = function(config) {
   var leerplanversie = config.curriculumVersion;
   var fieldCounters = config.fieldCounters;
@@ -22,10 +52,10 @@ $.fn.zillDonut = function(config) {
     for (i = 0; i < data.results.length; i++) { // get fields beneath
       if (data.results[i].$$expanded.type == 'CURRICULUM_ZILL_DEVELOPMENT_FIELD') {
         var field = data.results[i].$$expanded;
-        if (field.$$relationsFrom[0].$$expanded.to.href == personClusterKey) {
+        if (field.$$relationsFrom.filter(o => o.$$expanded.relationtype === 'IS_PART_OF')[0].$$expanded.to.href == personClusterKey) {
           personData.push(createObject(field));
         }
-        else if (field.$$relationsFrom[0].$$expanded.to.href == cultureClusterKey) {
+        else if (field.$$relationsFrom.filter(o => o.$$expanded.relationtype === 'IS_PART_OF')[0].$$expanded.to.href == cultureClusterKey) {
           cultureData.push(createObject(field));
         }
       }
